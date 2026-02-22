@@ -497,20 +497,20 @@ export default function SettingsPage() {
 
       {/* Delete Data Modal */}
       {showDeleteDataModal && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-          <div className="bg-gray-800 rounded-xl shadow-xl max-w-md w-full mx-4 p-6 border border-gray-700">
-            <h3 className="text-lg font-semibold text-white mb-2">Delete All Data?</h3>
-            <p className="text-gray-400 mb-4">
+        <div className="fixed inset-0 bg-black/50 dark:bg-black/70 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-md w-full mx-4 p-6 border border-gray-200 dark:border-gray-700">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Delete All Data?</h3>
+            <p className="text-gray-500 dark:text-gray-400 mb-4">
               This will permanently delete all your goals and tasks. This action cannot be undone.
             </p>
-            <p className="text-sm text-gray-500 mb-2">
-              Type <strong className="text-red-400">DELETE</strong> to confirm:
+            <p className="text-sm text-gray-400 dark:text-gray-500 mb-2">
+              Type <strong className="text-red-600 dark:text-red-400">DELETE</strong> to confirm:
             </p>
             <input
               type="text"
               value={deleteConfirmText}
               onChange={(e) => setDeleteConfirmText(e.target.value)}
-              className="w-full px-3 py-2 bg-gray-900 border border-gray-600 rounded-lg mb-4 text-white placeholder-gray-500"
+              className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg mb-4 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
               placeholder="DELETE"
             />
             <div className="flex gap-3">
@@ -519,7 +519,7 @@ export default function SettingsPage() {
                   setShowDeleteDataModal(false)
                   setDeleteConfirmText('')
                 }}
-                className="flex-1 px-4 py-2 border border-gray-600 text-gray-300 rounded-lg hover:bg-gray-700"
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 Cancel
               </button>
@@ -537,20 +537,20 @@ export default function SettingsPage() {
 
       {/* Delete Account Modal */}
       {showDeleteAccountModal && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-          <div className="bg-gray-800 rounded-xl shadow-xl max-w-md w-full mx-4 p-6 border border-gray-700">
-            <h3 className="text-lg font-semibold text-white mb-2">Delete Account?</h3>
-            <p className="text-gray-400 mb-4">
+        <div className="fixed inset-0 bg-black/50 dark:bg-black/70 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-md w-full mx-4 p-6 border border-gray-200 dark:border-gray-700">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Delete Account?</h3>
+            <p className="text-gray-500 dark:text-gray-400 mb-4">
               This will permanently delete your account and all associated data. This action cannot be undone.
             </p>
-            <p className="text-sm text-gray-500 mb-2">
-              Type <strong className="text-red-400">DELETE MY ACCOUNT</strong> to confirm:
+            <p className="text-sm text-gray-400 dark:text-gray-500 mb-2">
+              Type <strong className="text-red-600 dark:text-red-400">DELETE MY ACCOUNT</strong> to confirm:
             </p>
             <input
               type="text"
               value={deleteConfirmText}
               onChange={(e) => setDeleteConfirmText(e.target.value)}
-              className="w-full px-3 py-2 bg-gray-900 border border-gray-600 rounded-lg mb-4 text-white placeholder-gray-500"
+              className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg mb-4 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
               placeholder="DELETE MY ACCOUNT"
             />
             <div className="flex gap-3">
@@ -559,7 +559,7 @@ export default function SettingsPage() {
                   setShowDeleteAccountModal(false)
                   setDeleteConfirmText('')
                 }}
-                className="flex-1 px-4 py-2 border border-gray-600 text-gray-300 rounded-lg hover:bg-gray-700"
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 Cancel
               </button>

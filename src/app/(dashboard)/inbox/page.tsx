@@ -163,8 +163,8 @@ export default function InboxPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-gray-400 flex items-center gap-3">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center transition-colors">
+        <div className="text-gray-500 dark:text-gray-400 flex items-center gap-3">
           <div className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
           Loading...
         </div>
@@ -173,11 +173,11 @@ export default function InboxPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white space-y-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white space-y-6 transition-colors">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-white">📥 Inbox</h1>
-        <p className="text-gray-400">Quick capture — organize later</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">📥 Inbox</h1>
+        <p className="text-gray-500 dark:text-gray-400">Quick capture — organize later</p>
       </div>
 
       {/* Quick Add */}
@@ -191,14 +191,14 @@ export default function InboxPage() {
               setSuggestion(null)
             }}
             placeholder="Add a task..."
-            className="flex-1 px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-500"
+            className="flex-1 px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 shadow-sm"
           />
           {goals.length > 0 && (
             <button
               type="button"
               onClick={suggestGoal}
               disabled={suggesting || !newTask.trim()}
-              className="px-4 py-3 bg-purple-600/20 text-purple-400 rounded-lg border border-purple-500/30 hover:bg-purple-600/30 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="px-4 py-3 bg-purple-100 dark:bg-purple-600/20 text-purple-600 dark:text-purple-400 rounded-lg border border-purple-200 dark:border-purple-500/30 hover:bg-purple-200 dark:hover:bg-purple-600/30 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
               title="AI suggest goal"
             >
               {suggesting ? '⏳' : '✨'}
@@ -214,29 +214,29 @@ export default function InboxPage() {
 
         {/* AI Suggestion */}
         {suggestion && suggestion.goal_id && (
-          <div className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-4">
+          <div className="bg-purple-50 dark:bg-purple-500/10 border border-purple-200 dark:border-purple-500/30 rounded-lg p-4">
             <div className="flex items-center justify-between">
               <div className="flex-1">
-                <p className="text-sm text-purple-300">
+                <p className="text-sm text-purple-700 dark:text-purple-300">
                   <span className="font-medium">✨ Suggested:</span> Add to{' '}
-                  <span className="font-semibold text-purple-200">{suggestion.goal_title}</span>
+                  <span className="font-semibold text-purple-800 dark:text-purple-200">{suggestion.goal_title}</span>
                   {suggestion.priority && (
                     <span className={`ml-2 text-xs px-2 py-0.5 rounded ${
-                      suggestion.priority === 'high' ? 'bg-red-500/20 text-red-400' :
-                      suggestion.priority === 'medium' ? 'bg-yellow-500/20 text-yellow-400' :
-                      'bg-gray-700 text-gray-400'
+                      suggestion.priority === 'high' ? 'bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400' :
+                      suggestion.priority === 'medium' ? 'bg-yellow-100 dark:bg-yellow-500/20 text-yellow-600 dark:text-yellow-400' :
+                      'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
                     }`}>
                       {suggestion.priority}
                     </span>
                   )}
                 </p>
-                <p className="text-xs text-purple-400 mt-1">{suggestion.reason}</p>
+                <p className="text-xs text-purple-600 dark:text-purple-400 mt-1">{suggestion.reason}</p>
               </div>
               <div className="flex gap-2 ml-3">
                 <button
                   type="button"
                   onClick={() => setSuggestion(null)}
-                  className="text-sm px-3 py-1.5 text-gray-400 hover:bg-gray-700 rounded"
+                  className="text-sm px-3 py-1.5 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
                 >
                   Dismiss
                 </button>
@@ -259,14 +259,14 @@ export default function InboxPage() {
           {tasks.map((task) => (
             <div
               key={task.id}
-              className="flex items-center gap-3 bg-gray-800 rounded-lg border border-gray-700 p-4 hover:border-gray-600 transition-colors"
+              className="flex items-center gap-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 hover:border-gray-300 dark:hover:border-gray-600 transition-colors shadow-sm"
             >
               <button
                 onClick={() => toggleTask(task.id, !task.is_completed)}
                 className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
                   task.is_completed
                     ? 'bg-green-500 border-green-500 text-white'
-                    : 'border-gray-500 hover:border-green-500'
+                    : 'border-gray-400 dark:border-gray-500 hover:border-green-500'
                 }`}
               >
                 {task.is_completed && (
@@ -279,7 +279,7 @@ export default function InboxPage() {
                   </svg>
                 )}
               </button>
-              <span className="flex-1 text-white">{task.title}</span>
+              <span className="flex-1 text-gray-900 dark:text-white">{task.title}</span>
               
               {/* Move to Goal dropdown */}
               {goals.length > 0 && (
@@ -289,7 +289,7 @@ export default function InboxPage() {
                       moveTaskToGoal(task.id, e.target.value)
                     }
                   }}
-                  className="text-sm px-3 py-1.5 bg-gray-700 border border-gray-600 rounded text-gray-300 cursor-pointer"
+                  className="text-sm px-3 py-1.5 bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded text-gray-700 dark:text-gray-300 cursor-pointer"
                   defaultValue=""
                 >
                   <option value="" disabled>Move to...</option>
@@ -303,7 +303,7 @@ export default function InboxPage() {
               
               <button
                 onClick={() => deleteTask(task.id)}
-                className="p-2 text-gray-400 hover:text-red-400 transition-colors"
+                className="p-2 text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors"
               >
                 🗑️
               </button>
@@ -311,17 +311,17 @@ export default function InboxPage() {
           ))}
         </div>
       ) : (
-        <div className="text-center py-16 bg-gray-800 rounded-xl border border-gray-700">
+        <div className="text-center py-16 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
           <div className="text-5xl mb-4">📥</div>
-          <h3 className="text-lg font-medium text-white">Inbox is empty</h3>
-          <p className="text-gray-400 mt-1">
+          <h3 className="text-lg font-medium text-gray-900 dark:text-white">Inbox is empty</h3>
+          <p className="text-gray-500 dark:text-gray-400 mt-1">
             Quickly capture tasks here, organize them later
           </p>
         </div>
       )}
 
       {/* Tip */}
-      <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4 text-sm text-blue-300">
+      <div className="bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/30 rounded-lg p-4 text-sm text-blue-700 dark:text-blue-300">
         <strong>💡 Tip:</strong> Use Inbox for quick capture. Click ✨ to let AI suggest which goal 
         your task belongs to, or use &quot;Move to...&quot; to organize manually.
       </div>
