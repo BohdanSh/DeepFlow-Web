@@ -17,6 +17,15 @@ export type Database = {
           subscription_status: 'free' | 'trial' | 'pro'
           subscription_ends_at: string | null
           created_at: string
+          // Preferences
+          language: 'en' | 'uk'
+          timezone: string | null
+          date_format: 'DD/MM/YYYY' | 'MM/DD/YYYY'
+          week_starts_on: 'monday' | 'sunday'
+          // Notifications
+          email_notifications: boolean
+          daily_digest: boolean
+          task_reminders: boolean
         }
         Insert: {
           id: string
@@ -25,6 +34,13 @@ export type Database = {
           subscription_status?: 'free' | 'trial' | 'pro'
           subscription_ends_at?: string | null
           created_at?: string
+          language?: 'en' | 'uk'
+          timezone?: string | null
+          date_format?: 'DD/MM/YYYY' | 'MM/DD/YYYY'
+          week_starts_on?: 'monday' | 'sunday'
+          email_notifications?: boolean
+          daily_digest?: boolean
+          task_reminders?: boolean
         }
         Update: {
           id?: string
@@ -33,6 +49,13 @@ export type Database = {
           subscription_status?: 'free' | 'trial' | 'pro'
           subscription_ends_at?: string | null
           created_at?: string
+          language?: 'en' | 'uk'
+          timezone?: string | null
+          date_format?: 'DD/MM/YYYY' | 'MM/DD/YYYY'
+          week_starts_on?: 'monday' | 'sunday'
+          email_notifications?: boolean
+          daily_digest?: boolean
+          task_reminders?: boolean
         }
       }
       goals: {

@@ -353,6 +353,7 @@ export default function GoalDetailPage({ params }: { params: Promise<{ id: strin
         <TaskForm
           task={editingTask}
           goalId={goalId}
+          goalTitle={goal?.title}
           onSubmit={(data) => {
             if (editingTask) {
               updateTask(editingTask.id, data)

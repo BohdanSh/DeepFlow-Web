@@ -46,12 +46,20 @@ export default async function DashboardLayout({
             </NavLink>
           </nav>
 
-          {/* User */}
-          <div className="p-4 border-t border-gray-200">
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-medium">
-                {profile?.full_name?.[0] || user.email?.[0]?.toUpperCase()}
-              </div>
+          {/* User & Settings */}
+          <div className="p-4 border-t border-gray-200 space-y-3">
+            <Link href="/settings" className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 transition-colors">
+              {profile?.avatar_url ? (
+                <img 
+                  src={profile.avatar_url} 
+                  alt="Avatar" 
+                  className="w-8 h-8 rounded-full object-cover"
+                />
+              ) : (
+                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-medium">
+                  {profile?.full_name?.[0] || user.email?.[0]?.toUpperCase()}
+                </div>
+              )}
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-gray-900 truncate">
                   {profile?.full_name || 'User'}
@@ -60,7 +68,8 @@ export default async function DashboardLayout({
                   {profile?.subscription_status === 'pro' ? '⭐ Pro' : 'Free plan'}
                 </p>
               </div>
-            </div>
+              <span className="text-gray-400">⚙️</span>
+            </Link>
           </div>
         </div>
       </aside>
@@ -86,6 +95,7 @@ export default async function DashboardLayout({
           <MobileNavLink href="/dashboard" icon="📅" label="Today" />
           <MobileNavLink href="/inbox" icon="📥" label="Inbox" />
           <MobileNavLink href="/goals" icon="🎯" label="Goals" />
+          <MobileNavLink href="/settings" icon="⚙️" label="More" />
         </div>
       </nav>
     </div>
