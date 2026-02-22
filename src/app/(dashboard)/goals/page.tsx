@@ -39,14 +39,14 @@ export default function GoalsPage() {
     }
     
     // Fetch tasks separately for each goal
-    if (data) {
+    if (data && data.length > 0) {
       const goalsWithTasks = await Promise.all(
-        data.map(async (goal) => {
+        (data as Goal[]).map(async (goal: Goal) => {
           const { data: tasks } = await supabase
             .from('tasks')
             .select('is_completed')
             .eq('goal_id', goal.id)
-          return { ...goal, tasks: tasks || [] }
+          return { ...goal, tasks: tasks || [] } as GoalWithTasks
         })
       )
       setGoals(goalsWithTasks)
