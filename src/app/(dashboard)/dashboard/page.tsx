@@ -95,16 +95,17 @@ export default async function DashboardPage() {
         {goals && goals.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {goals.map((goal) => (
-              <div
+              <a
                 key={goal.id}
-                className="bg-white rounded-lg border border-gray-200 p-4"
+                href={`/goals/${goal.id}`}
+                className="bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow cursor-pointer block"
                 style={{ borderLeftColor: goal.color, borderLeftWidth: 4 }}
               >
                 <h3 className="font-medium text-gray-900">{goal.title}</h3>
                 {goal.category && (
                   <span className="text-xs text-gray-500 capitalize">{goal.category}</span>
                 )}
-              </div>
+              </a>
             ))}
           </div>
         ) : (

@@ -27,14 +27,34 @@ export default function GoalsPage() {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return
 
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('goals')
-      .select('*, tasks(is_completed)')
+      .select('*')
       .eq('user_id', user.id)
       .eq('is_archived', false)
       .order('created_at', { ascending: false })
+    
+    if (error) {
+      console.error('Error fetching goals:', error)
+    }
+    
+    // Fetch tasks separately for each goal
+    if (data) {
+      const goalsWithTasks = await Promise.all(
+        data.map(async (goal) => {
+          const { data: tasks } = await supabase
+            .from('tasks')
+            .select('is_completed')
+            .eq('goal_id', goal.id)
+          return { ...goal, tasks: tasks || [] }
+        })
+      )
+      setGoals(goalsWithTasks)
+      setLoading(false)
+      return
+    }
 
-    setGoals((data as GoalWithTasks[]) || [])
+    setGoals([])
     setLoading(false)
   }
 
