@@ -10,6 +10,7 @@ import {
   DragStartEvent,
   closestCorners,
   PointerSensor,
+  TouchSensor,
   useSensor,
   useSensors,
 } from '@dnd-kit/core'
@@ -47,11 +48,15 @@ function getToday(): string {
 function SortableTaskCard({ 
   task, 
   goals, 
-  onToggleComplete 
+  onToggleComplete,
+  onMove,
+  currentColumn
 }: { 
   task: Task
   goals: Goal[]
   onToggleComplete: (taskId: string, isCompleted: boolean) => void
+  onMove: (taskId: string, direction: 'left' | 'right') => void
+  currentColumn: ColumnType
 }) {
   const {
     attributes,
@@ -153,6 +158,30 @@ function SortableTaskCard({
               </span>
             )}
           </div>
+          
+          {/* Move buttons */}
+          <div className="flex gap-1 mt-2">
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                onMove(task.id, 'left')
+              }}
+              disabled={currentColumn === 'backlog'}
+              className="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded hover:bg-gray-200 dark:hover:bg-gray-600 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            >
+              ◀️
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                onMove(task.id, 'right')
+              }}
+              disabled={currentColumn === 'done'}
+              className="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded hover:bg-gray-200 dark:hover:bg-gray-600 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            >
+              ▶️
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -240,6 +269,12 @@ export default function BoardPage() {
     useSensor(PointerSensor, {
       activationConstraint: {
         distance: 8,
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 200,
+        tolerance: 5,
       },
     })
   )
@@ -358,6 +393,38 @@ export default function BoardPage() {
       .eq('id', taskId)
   }
 
+  const handleMove = async (taskId: string, direction: 'left' | 'right') => {
+    const task = tasks.find(t => t.id === taskId)
+    if (!task) return
+
+    const columnOrder: ColumnType[] = ['backlog', 'todo', 'in_progress', 'review', 'done']
+    const currentStatus = (task.status || 'backlog') as ColumnType
+    const currentIndex = columnOrder.indexOf(currentStatus)
+    
+    const newIndex = direction === 'left' ? currentIndex - 1 : currentIndex + 1
+    if (newIndex < 0 || newIndex >= columnOrder.length) return
+    
+    const newColumn = columnOrder[newIndex]
+    const isDone = newColumn === 'done'
+    
+    const updateData: TaskUpdate = {
+      status: newColumn,
+      is_completed: isDone,
+      completed_at: isDone ? new Date().toISOString() : null
+    }
+
+    // Optimistic update
+    setTasks(prev => prev.map(t => 
+      t.id === taskId ? { ...t, ...updateData } as Task : t
+    ))
+
+    const supabase = createClient()
+    await supabase
+      .from('tasks')
+      .update(updateData as never)
+      .eq('id', taskId)
+  }
+
   const handleQuickAdd = async (title: string, columnId: ColumnType) => {
     const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
@@ -450,6 +517,8 @@ export default function BoardPage() {
                           task={task}
                           goals={goals}
                           onToggleComplete={handleToggleComplete}
+                          onMove={handleMove}
+                          currentColumn={column.id}
                         />
                       ))
                     )}
