@@ -1,11 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { Task, Goal } from '@/types/database'
 
-type TaskWithProject = Task & {
-  projects: {
-    title: string
-    goals: { title: string; color: string } | null
-  } | null
+type TaskWithGoal = Task & {
+  goals: { title: string; color: string } | null
 }
 
 export default async function DashboardPage() {
@@ -16,20 +13,20 @@ export default async function DashboardPage() {
   const today = new Date().toISOString().split('T')[0]
   const { data: todayTasks } = await supabase
     .from('tasks')
-    .select('*, projects(title, goals(title, color))')
+    .select('*, goals(title, color)')
     .eq('user_id', user!.id)
     .eq('due_date', today)
     .eq('is_completed', false)
-    .order('priority', { ascending: false }) as { data: TaskWithProject[] | null }
+    .order('priority', { ascending: false }) as { data: TaskWithGoal[] | null }
 
   // Get overdue tasks
   const { data: overdueTasks } = await supabase
     .from('tasks')
-    .select('*, projects(title, goals(title, color))')
+    .select('*, goals(title, color)')
     .eq('user_id', user!.id)
     .lt('due_date', today)
     .eq('is_completed', false)
-    .order('due_date', { ascending: true }) as { data: TaskWithProject[] | null }
+    .order('due_date', { ascending: true }) as { data: TaskWithGoal[] | null }
 
   // Get goals for progress
   const { data: goals } = await supabase
@@ -121,7 +118,7 @@ export default async function DashboardPage() {
   )
 }
 
-function TaskCard({ task }: { task: TaskWithProject }) {
+function TaskCard({ task }: { task: TaskWithGoal }) {
   const priorityColors = {
     high: 'bg-red-100 text-red-700',
     medium: 'bg-yellow-100 text-yellow-700',
@@ -136,9 +133,9 @@ function TaskCard({ task }: { task: TaskWithProject }) {
       />
       <div className="flex-1 min-w-0">
         <p className="font-medium text-gray-900">{task.title}</p>
-        {task.projects && (
+        {task.goals && (
           <p className="text-sm text-gray-500">
-            {task.projects.goals?.title} → {task.projects.title}
+            🎯 {task.goals.title}
           </p>
         )}
       </div>

@@ -141,7 +141,7 @@ export default function InboxPage() {
 
       {/* Tip */}
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-blue-800">
-        <strong>💡 Tip:</strong> Use Inbox for quick capture. Later, assign tasks to Projects 
+        <strong>💡 Tip:</strong> Use Inbox for quick capture. Later, assign tasks to Goals 
         and set due dates from the Goals page.
       </div>
     </div>

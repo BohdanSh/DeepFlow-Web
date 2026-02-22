@@ -22,17 +22,7 @@ Generate a helpful goal structure in JSON format:
 {
   "description": "A motivating 1-2 sentence description of what achieving this goal means",
   "category": "one of: career, health, finance, personal, relationships",
-  "target_date": "suggested target date in YYYY-MM-DD format (be realistic, 3-12 months for medium goals, 1-3 years for big goals)",
-  "suggested_projects": [
-    {
-      "title": "First milestone/project name",
-      "description": "Brief description"
-    },
-    {
-      "title": "Second milestone/project name", 
-      "description": "Brief description"
-    }
-  ]
+  "target_date": "suggested target date in YYYY-MM-DD format (be realistic, 3-12 months for medium goals, 1-3 years for big goals)"
 }
 
 Respond ONLY with valid JSON, no markdown, no explanation.`

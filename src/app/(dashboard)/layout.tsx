@@ -44,9 +44,6 @@ export default async function DashboardLayout({
             <NavLink href="/goals" icon="🎯">
               Goals
             </NavLink>
-            <NavLink href="/projects" icon="📁">
-              Projects
-            </NavLink>
           </nav>
 
           {/* User */}
@@ -89,7 +86,6 @@ export default async function DashboardLayout({
           <MobileNavLink href="/dashboard" icon="📅" label="Today" />
           <MobileNavLink href="/inbox" icon="📥" label="Inbox" />
           <MobileNavLink href="/goals" icon="🎯" label="Goals" />
-          <MobileNavLink href="/projects" icon="📁" label="Projects" />
         </div>
       </nav>
     </div>

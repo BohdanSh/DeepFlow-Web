@@ -73,46 +73,10 @@ export type Database = {
           updated_at?: string
         }
       }
-      projects: {
-        Row: {
-          id: string
-          user_id: string
-          goal_id: string | null
-          title: string
-          description: string | null
-          status: 'active' | 'completed' | 'on_hold'
-          deadline: string | null
-          created_at: string
-          updated_at: string
-        }
-        Insert: {
-          id?: string
-          user_id: string
-          goal_id?: string | null
-          title: string
-          description?: string | null
-          status?: 'active' | 'completed' | 'on_hold'
-          deadline?: string | null
-          created_at?: string
-          updated_at?: string
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          goal_id?: string | null
-          title?: string
-          description?: string | null
-          status?: 'active' | 'completed' | 'on_hold'
-          deadline?: string | null
-          created_at?: string
-          updated_at?: string
-        }
-      }
       tasks: {
         Row: {
           id: string
           user_id: string
-          project_id: string | null
           goal_id: string | null
           title: string
           description: string | null
@@ -127,7 +91,6 @@ export type Database = {
         Insert: {
           id?: string
           user_id: string
-          project_id?: string | null
           goal_id?: string | null
           title: string
           description?: string | null
@@ -142,7 +105,6 @@ export type Database = {
         Update: {
           id?: string
           user_id?: string
-          project_id?: string | null
           goal_id?: string | null
           title?: string
           description?: string | null
@@ -171,9 +133,7 @@ export type Database = {
 // Helper types
 export type Profile = Database['public']['Tables']['profiles']['Row']
 export type Goal = Database['public']['Tables']['goals']['Row']
-export type Project = Database['public']['Tables']['projects']['Row']
 export type Task = Database['public']['Tables']['tasks']['Row']
 
 export type GoalInsert = Database['public']['Tables']['goals']['Insert']
-export type ProjectInsert = Database['public']['Tables']['projects']['Insert']
 export type TaskInsert = Database['public']['Tables']['tasks']['Insert']

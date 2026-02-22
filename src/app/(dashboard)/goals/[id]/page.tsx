@@ -68,20 +68,32 @@ export default function GoalDetailPage({ params }: { params: Promise<{ id: strin
 
   async function createTask(data: Omit<TaskInsert, 'user_id' | 'goal_id'>) {
     const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return
+    if (!user) {
+      console.error('No user found')
+      return
+    }
 
-    const { error } = await supabase
+    console.log('Creating task:', { ...data, user_id: user.id, goal_id: goalId })
+
+    const { data: insertedTask, error } = await supabase
       .from('tasks')
       .insert({
         ...data,
         user_id: user.id,
         goal_id: goalId,
+        is_inbox: false,
       } as never)
+      .select()
 
-    if (!error) {
-      fetchGoalAndTasks()
-      setShowTaskForm(false)
+    if (error) {
+      console.error('Error creating task:', error)
+      alert(`Error creating task: ${error.message}`)
+      return
     }
+
+    console.log('Task created:', insertedTask)
+    fetchGoalAndTasks()
+    setShowTaskForm(false)
   }
 
   async function updateTask(id: string, updates: Partial<Task>) {
@@ -90,10 +102,14 @@ export default function GoalDetailPage({ params }: { params: Promise<{ id: strin
       .update(updates as never)
       .eq('id', id)
 
-    if (!error) {
-      fetchGoalAndTasks()
-      setEditingTask(null)
+    if (error) {
+      console.error('Error updating task:', error)
+      alert(`Error: ${error.message}`)
+      return
     }
+
+    fetchGoalAndTasks()
+    setEditingTask(null)
   }
 
   async function toggleTaskComplete(taskId: string, isCompleted: boolean) {
@@ -169,16 +185,21 @@ export default function GoalDetailPage({ params }: { params: Promise<{ id: strin
       description: t.description,
       due_date: t.suggested_due_date,
       priority: t.priority,
+      is_inbox: false,
     }))
 
     const { error } = await supabase
       .from('tasks')
       .insert(tasksToInsert as never)
 
-    if (!error) {
-      setSuggestedTasks([])
-      fetchGoalAndTasks()
+    if (error) {
+      console.error('Error adding suggested tasks:', error)
+      alert(`Error: ${error.message}`)
+      return
     }
+
+    setSuggestedTasks([])
+    fetchGoalAndTasks()
   }
 
   // Calculate progress

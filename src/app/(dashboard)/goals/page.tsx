@@ -85,7 +85,7 @@ export default function GoalsPage() {
   }
 
   async function deleteGoal(id: string) {
-    if (!confirm('Delete this goal? All projects and tasks will be deleted too.')) return
+    if (!confirm('Delete this goal? All tasks will be deleted too.')) return
 
     const { error } = await supabase
       .from('goals')
@@ -262,7 +262,6 @@ function GoalForm({
     description: string
     category: string
     target_date: string
-    suggested_projects?: { title: string; description: string }[]
   } | null>(null)
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -367,16 +366,6 @@ function GoalForm({
                 <p><strong>Description:</strong> {aiSuggestion.description}</p>
                 <p><strong>Category:</strong> {aiSuggestion.category}</p>
                 <p><strong>Target:</strong> {aiSuggestion.target_date}</p>
-                {aiSuggestion.suggested_projects && (
-                  <div className="mt-2">
-                    <strong>Suggested Projects:</strong>
-                    <ul className="list-disc list-inside mt-1">
-                      {aiSuggestion.suggested_projects.map((p, i) => (
-                        <li key={i}>{p.title}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
               </div>
             </div>
           )}
