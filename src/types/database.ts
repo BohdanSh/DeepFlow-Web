@@ -104,6 +104,7 @@ export type Database = {
           title: string
           description: string | null
           due_date: string | null
+          status: 'backlog' | 'in_progress' | null
           is_completed: boolean
           completed_at: string | null
           priority: 'low' | 'medium' | 'high'
@@ -118,6 +119,7 @@ export type Database = {
           title: string
           description?: string | null
           due_date?: string | null
+          status?: 'backlog' | 'in_progress' | null
           is_completed?: boolean
           completed_at?: string | null
           priority?: 'low' | 'medium' | 'high'
@@ -132,6 +134,7 @@ export type Database = {
           title?: string
           description?: string | null
           due_date?: string | null
+          status?: 'backlog' | 'in_progress' | null
           is_completed?: boolean
           completed_at?: string | null
           priority?: 'low' | 'medium' | 'high'

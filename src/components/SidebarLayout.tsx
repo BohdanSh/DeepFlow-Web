@@ -63,6 +63,9 @@ export function SidebarLayout({ children, profile, userEmail }: SidebarLayoutPro
             <NavLink href="/dashboard" icon="📅" isCollapsed={isCollapsed} isActive={pathname === '/dashboard'}>
               Today
             </NavLink>
+            <NavLink href="/board" icon="📋" isCollapsed={isCollapsed} isActive={pathname === '/board'}>
+              Board
+            </NavLink>
             <NavLink href="/inbox" icon="📥" isCollapsed={isCollapsed} isActive={pathname === '/inbox'}>
               Inbox
             </NavLink>
@@ -129,6 +132,7 @@ export function SidebarLayout({ children, profile, userEmail }: SidebarLayoutPro
       <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 z-10 transition-colors">
         <div className="flex justify-around items-center h-16">
           <MobileNavLink href="/dashboard" icon="📅" label="Today" isActive={pathname === '/dashboard'} />
+          <MobileNavLink href="/board" icon="📋" label="Board" isActive={pathname === '/board'} />
           <MobileNavLink href="/inbox" icon="📥" label="Inbox" isActive={pathname === '/inbox'} />
           <MobileNavLink href="/goals" icon="🎯" label="Goals" isActive={pathname === '/goals' || pathname.startsWith('/goals/')} />
           <MobileNavLink href="/settings" icon="⚙️" label="More" isActive={pathname === '/settings'} />
