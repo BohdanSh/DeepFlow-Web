@@ -22,13 +22,13 @@ export default async function DashboardLayout({
     .single() as { data: Profile | null }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-900">
       {/* Desktop Sidebar - hidden on mobile */}
-      <aside className="hidden md:fixed md:inset-y-0 md:left-0 md:flex md:w-64 md:flex-col bg-white border-r border-gray-200">
+      <aside className="hidden md:fixed md:inset-y-0 md:left-0 md:flex md:w-64 md:flex-col bg-gray-800 border-r border-gray-700">
         <div className="flex flex-col h-full">
           {/* Logo */}
-          <div className="flex items-center h-16 px-6 border-b border-gray-200">
-            <Link href="/dashboard" className="text-xl font-bold text-gray-900">
+          <div className="flex items-center h-16 px-6 border-b border-gray-700">
+            <Link href="/dashboard" className="text-xl font-bold text-white">
               🎯 DeepFlow
             </Link>
           </div>
@@ -47,8 +47,8 @@ export default async function DashboardLayout({
           </nav>
 
           {/* User & Settings */}
-          <div className="p-4 border-t border-gray-200 space-y-3">
-            <Link href="/settings" className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 transition-colors">
+          <div className="p-4 border-t border-gray-700 space-y-3">
+            <Link href="/settings" className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-700 transition-colors">
               {profile?.avatar_url ? (
                 <img 
                   src={profile.avatar_url} 
@@ -56,15 +56,15 @@ export default async function DashboardLayout({
                   className="w-8 h-8 rounded-full object-cover"
                 />
               ) : (
-                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-medium">
+                <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-medium">
                   {profile?.full_name?.[0] || user.email?.[0]?.toUpperCase()}
                 </div>
               )}
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 truncate">
+                <p className="text-sm font-medium text-white truncate">
                   {profile?.full_name || 'User'}
                 </p>
-                <p className="text-xs text-gray-500 truncate">
+                <p className="text-xs text-gray-400 truncate">
                   {profile?.subscription_status === 'pro' ? '⭐ Pro' : 'Free plan'}
                 </p>
               </div>
@@ -75,8 +75,8 @@ export default async function DashboardLayout({
       </aside>
 
       {/* Mobile Header */}
-      <header className="md:hidden fixed top-0 left-0 right-0 h-14 bg-white border-b border-gray-200 flex items-center justify-center z-10">
-        <Link href="/dashboard" className="text-lg font-bold text-gray-900">
+      <header className="md:hidden fixed top-0 left-0 right-0 h-14 bg-gray-800 border-b border-gray-700 flex items-center justify-center z-10">
+        <Link href="/dashboard" className="text-lg font-bold text-white">
           🎯 DeepFlow
         </Link>
       </header>
@@ -90,7 +90,7 @@ export default async function DashboardLayout({
       </main>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-10">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-gray-800 border-t border-gray-700 z-10">
         <div className="flex justify-around items-center h-16">
           <MobileNavLink href="/dashboard" icon="📅" label="Today" />
           <MobileNavLink href="/inbox" icon="📥" label="Inbox" />
@@ -114,7 +114,7 @@ function NavLink({
   return (
     <Link
       href={href}
-      className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-100 transition-colors"
+      className="flex items-center px-3 py-2 text-sm font-medium text-gray-300 rounded-lg hover:bg-gray-700 hover:text-white transition-colors"
     >
       <span className="mr-3">{icon}</span>
       {children}
@@ -134,7 +134,7 @@ function MobileNavLink({
   return (
     <Link
       href={href}
-      className="flex flex-col items-center justify-center py-2 px-4 text-gray-600 hover:text-blue-600 transition-colors"
+      className="flex flex-col items-center justify-center py-2 px-4 text-gray-400 hover:text-blue-400 transition-colors"
     >
       <span className="text-xl">{icon}</span>
       <span className="text-xs mt-1">{label}</span>
