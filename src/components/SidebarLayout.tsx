@@ -72,6 +72,9 @@ export function SidebarLayout({ children, profile, userEmail }: SidebarLayoutPro
             <NavLink href="/goals" icon="🎯" isCollapsed={isCollapsed} isActive={pathname === '/goals' || pathname.startsWith('/goals/')}>
               Goals
             </NavLink>
+            <NavLink href="/finance" icon="💰" isCollapsed={isCollapsed} isActive={pathname === '/finance'}>
+              Finance
+            </NavLink>
           </nav>
 
           {/* Theme Toggle & User & Settings */}
@@ -133,8 +136,8 @@ export function SidebarLayout({ children, profile, userEmail }: SidebarLayoutPro
         <div className="flex justify-around items-center h-16">
           <MobileNavLink href="/dashboard" icon="📅" label="Today" isActive={pathname === '/dashboard'} />
           <MobileNavLink href="/board" icon="📋" label="Board" isActive={pathname === '/board'} />
-          <MobileNavLink href="/inbox" icon="📥" label="Inbox" isActive={pathname === '/inbox'} />
           <MobileNavLink href="/goals" icon="🎯" label="Goals" isActive={pathname === '/goals' || pathname.startsWith('/goals/')} />
+          <MobileNavLink href="/finance" icon="💰" label="Finance" isActive={pathname === '/finance'} />
           <MobileNavLink href="/settings" icon="⚙️" label="More" isActive={pathname === '/settings'} />
         </div>
       </nav>

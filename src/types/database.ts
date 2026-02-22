@@ -163,3 +163,30 @@ export type Task = Database['public']['Tables']['tasks']['Row']
 
 export type GoalInsert = Database['public']['Tables']['goals']['Insert']
 export type TaskInsert = Database['public']['Tables']['tasks']['Insert']
+
+// Transaction types
+export type TransactionType = 'income' | 'expense'
+
+export interface Transaction {
+  id: string
+  user_id: string
+  type: TransactionType
+  amount: number
+  category: string
+  description: string | null
+  date: string
+  created_at: string
+  updated_at: string
+}
+
+export interface TransactionInsert {
+  id?: string
+  user_id: string
+  type: TransactionType
+  amount: number
+  category: string
+  description?: string | null
+  date?: string
+  created_at?: string
+  updated_at?: string
+}
