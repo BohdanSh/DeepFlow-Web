@@ -2,8 +2,25 @@
 
 import { useTheme } from './ThemeProvider'
 
-export function ThemeToggle() {
+interface ThemeToggleProps {
+  compact?: boolean
+}
+
+export function ThemeToggle({ compact = false }: ThemeToggleProps) {
   const { theme, toggleTheme } = useTheme()
+
+  if (compact) {
+    return (
+      <button
+        onClick={toggleTheme}
+        className="flex items-center justify-center w-full p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-xl"
+        aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+        title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+      >
+        {theme === 'dark' ? '🌙' : '☀️'}
+      </button>
+    )
+  }
 
   return (
     <button
