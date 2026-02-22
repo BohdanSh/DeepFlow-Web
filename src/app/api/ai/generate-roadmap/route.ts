@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import OpenAI from 'openai'
 
 interface SuggestedTask {
   title: string
@@ -8,16 +7,18 @@ interface SuggestedTask {
   priority: 'low' | 'medium' | 'high'
 }
 
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY
+
 export async function POST(request: NextRequest) {
   try {
     const { title, description, target_date } = await request.json()
 
-    const openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
-    })
-
     if (!title) {
       return NextResponse.json({ error: 'Title is required' }, { status: 400 })
+    }
+
+    if (!GEMINI_API_KEY) {
+      return NextResponse.json({ error: 'API key not configured' }, { status: 500 })
     }
 
     const today = new Date().toISOString().split('T')[0]
@@ -36,44 +37,60 @@ Each task should be:
 - Achievable in a reasonable timeframe
 - Ordered by priority/dependency
 
-Return ONLY a JSON array with this structure (no markdown, no code blocks):
+Return ONLY a JSON array with this structure (no markdown, no code blocks, no explanation):
 [
   {
     "title": "Task title",
     "description": "Brief description of what to do",
     "suggested_due_date": "YYYY-MM-DD",
-    "priority": "high" | "medium" | "low"
+    "priority": "high" or "medium" or "low"
   }
 ]
 
 Space out the due dates logically from today to the target date. If no target date, spread over 2-4 weeks.
 Start with high-priority foundational tasks, then medium, then low priority polish tasks.`
 
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
-      messages: [
-        {
-          role: 'system',
-          content: 'You are a helpful productivity assistant. Always respond with valid JSON only, no markdown formatting.',
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-        {
-          role: 'user',
-          content: prompt,
-        },
-      ],
-      temperature: 0.7,
-      max_tokens: 1500,
-    })
+        body: JSON.stringify({
+          contents: [
+            {
+              parts: [{ text: prompt }],
+            },
+          ],
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 2048,
+          },
+        }),
+      }
+    )
 
-    const responseText = completion.choices[0]?.message?.content || '[]'
-    
-    // Clean up response - remove markdown code blocks if present
-    let cleanedResponse = responseText.trim()
-    if (cleanedResponse.startsWith('```')) {
-      cleanedResponse = cleanedResponse.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '')
+    if (!response.ok) {
+      const error = await response.text()
+      console.error('Gemini API error:', error)
+      return NextResponse.json({ error: 'AI generation failed' }, { status: 500 })
     }
 
-    const tasks: SuggestedTask[] = JSON.parse(cleanedResponse)
+    const data = await response.json()
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text
+
+    if (!text) {
+      return NextResponse.json({ error: 'No response from AI' }, { status: 500 })
+    }
+
+    // Parse JSON from response (handle potential markdown code blocks)
+    let jsonText = text.trim()
+    if (jsonText.startsWith('```')) {
+      jsonText = jsonText.replace(/```json?\n?/g, '').replace(/```/g, '').trim()
+    }
+
+    const tasks: SuggestedTask[] = JSON.parse(jsonText)
 
     return NextResponse.json({ tasks })
   } catch (error) {
