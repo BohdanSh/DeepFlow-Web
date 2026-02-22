@@ -199,8 +199,8 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-gray-400 flex items-center gap-3">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center transition-colors">
+        <div className="text-gray-500 dark:text-gray-400 flex items-center gap-3">
           <div className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
           Loading...
         </div>
@@ -209,47 +209,48 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white space-y-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white space-y-6 transition-colors">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-white">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
             {getGreeting()}, Богдан! 👋
           </h1>
-          <p className="text-gray-400 mt-1">{formatDate()}</p>
+          <p className="text-gray-500 dark:text-gray-400 mt-1">{formatDate()}</p>
         </div>
         
         {/* Quick Stats */}
         <div className="flex gap-4">
-          <div className="bg-gray-800 rounded-xl px-4 py-3 border border-gray-700">
-            <div className="text-2xl font-bold text-blue-400">{todayTasks.length}</div>
-            <div className="text-xs text-gray-400">tasks today</div>
+          <div className="bg-white dark:bg-gray-800 rounded-xl px-4 py-3 border border-gray-200 dark:border-gray-700 shadow-sm">
+            <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{todayTasks.length}</div>
+            <div className="text-xs text-gray-500 dark:text-gray-400">tasks today</div>
           </div>
           {overdueTasks.length > 0 && (
-            <div className="bg-gray-800 rounded-xl px-4 py-3 border border-red-500/30">
-              <div className="text-2xl font-bold text-red-400">{overdueTasks.length}</div>
-              <div className="text-xs text-gray-400">overdue</div>
+            <div className="bg-white dark:bg-gray-800 rounded-xl px-4 py-3 border border-red-200 dark:border-red-500/30 shadow-sm">
+              <div className="text-2xl font-bold text-red-600 dark:text-red-400">{overdueTasks.length}</div>
+              <div className="text-xs text-gray-500 dark:text-gray-400">overdue</div>
             </div>
           )}
         </div>
       </div>
 
       {/* Quick Add Task */}
-      <div className="bg-gray-800 rounded-xl p-4 border border-gray-700">
-        <form onSubmit={handleQuickAdd} className="flex flex-col sm:flex-row gap-3">
-          <div className="flex-1 flex gap-2">
+      <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700 shadow-sm">
+        <form onSubmit={handleQuickAdd} className="space-y-3">
+          {/* Input row */}
+          <div className="flex gap-2">
             <input
               type="text"
               value={newTaskTitle}
               onChange={(e) => setNewTaskTitle(e.target.value)}
               placeholder="Add a quick task for today..."
-              className="flex-1 bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+              className="flex-1 min-w-0 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-3 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
             />
             <button
               type="button"
               onClick={enhanceTask}
               disabled={!newTaskTitle.trim() || isEnhancing}
-              className="px-4 py-3 bg-purple-600/20 text-purple-400 rounded-lg border border-purple-500/30 hover:bg-purple-600/30 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+              className="flex-shrink-0 px-4 py-3 bg-purple-100 dark:bg-purple-600/20 text-purple-600 dark:text-purple-400 rounded-lg border border-purple-200 dark:border-purple-500/30 hover:bg-purple-200 dark:hover:bg-purple-600/30 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
               title="Enhance with AI"
             >
               {isEnhancing ? (
@@ -260,11 +261,12 @@ export default function DashboardPage() {
             </button>
           </div>
           
+          {/* Select and Add row */}
           <div className="flex gap-2">
             <select
               value={selectedGoalId}
               onChange={(e) => setSelectedGoalId(e.target.value)}
-              className="bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors cursor-pointer"
+              className="flex-1 min-w-0 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 transition-colors cursor-pointer"
             >
               <option value="inbox">📥 Inbox</option>
               {goals.map(goal => (
@@ -277,7 +279,7 @@ export default function DashboardPage() {
             <button
               type="submit"
               disabled={!newTaskTitle.trim() || isAdding}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-all font-medium"
+              className="flex-shrink-0 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-all font-medium whitespace-nowrap"
             >
               {isAdding ? '...' : '+ Add'}
             </button>
@@ -287,8 +289,8 @@ export default function DashboardPage() {
 
       {/* Overdue Section */}
       {overdueTasks.length > 0 && (
-        <section className="bg-red-500/10 rounded-xl p-4 border border-red-500/30">
-          <h2 className="font-semibold text-red-400 mb-3 flex items-center gap-2">
+        <section className="bg-red-50 dark:bg-red-500/10 rounded-xl p-4 border border-red-200 dark:border-red-500/30">
+          <h2 className="font-semibold text-red-600 dark:text-red-400 mb-3 flex items-center gap-2">
             <span className="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
               {overdueTasks.length}
             </span>
@@ -309,10 +311,10 @@ export default function DashboardPage() {
 
       {/* Today's Tasks */}
       <section>
-        <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
           📅 Today&apos;s Tasks
           {todayTasks.length > 0 && (
-            <span className="bg-gray-700 text-gray-300 text-xs px-2 py-0.5 rounded-full">
+            <span className="bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs px-2 py-0.5 rounded-full">
               {todayTasks.length}
             </span>
           )}
@@ -330,10 +332,10 @@ export default function DashboardPage() {
             ))}
           </div>
         ) : (
-          <div className="bg-gray-800 rounded-xl p-8 border border-gray-700 text-center">
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-8 border border-gray-200 dark:border-gray-700 text-center shadow-sm">
             <div className="text-4xl mb-3">🎉</div>
-            <p className="text-gray-400">No tasks for today!</p>
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-gray-500 dark:text-gray-400">No tasks for today!</p>
+            <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
               Use the form above to add a new task
             </p>
           </div>
@@ -343,10 +345,10 @@ export default function DashboardPage() {
       {/* Goals Progress */}
       <section>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-white">🎯 Goals Progress</h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">🎯 Goals Progress</h2>
           <Link 
             href="/goals"
-            className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+            className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors"
           >
             View all →
           </Link>
@@ -359,12 +361,12 @@ export default function DashboardPage() {
             ))}
           </div>
         ) : (
-          <div className="bg-gray-800 rounded-xl p-8 border border-gray-700 text-center">
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-8 border border-gray-200 dark:border-gray-700 text-center shadow-sm">
             <div className="text-4xl mb-3">🎯</div>
-            <p className="text-gray-400">No goals yet</p>
+            <p className="text-gray-500 dark:text-gray-400">No goals yet</p>
             <Link
               href="/goals"
-              className="inline-block mt-3 text-sm text-blue-400 hover:text-blue-300"
+              className="inline-block mt-3 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300"
             >
               Create your first goal →
             </Link>
@@ -375,15 +377,15 @@ export default function DashboardPage() {
       {/* Recent Activity */}
       {recentCompleted.length > 0 && (
         <section>
-          <h2 className="text-lg font-semibold text-white mb-4">✅ Recent Completed</h2>
-          <div className="bg-gray-800 rounded-xl border border-gray-700 divide-y divide-gray-700">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">✅ Recent Completed</h2>
+          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 divide-y divide-gray-100 dark:divide-gray-700 shadow-sm">
             {recentCompleted.map(task => (
               <div key={task.id} className="p-3 flex items-center gap-3">
                 <span className="text-green-500">✓</span>
                 <span className="flex-1 text-gray-400 line-through">{task.title}</span>
                 {task.goals && (
                   <span 
-                    className="text-xs px-2 py-1 rounded-full bg-gray-700"
+                    className="text-xs px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-700"
                     style={{ color: task.goals.color }}
                   >
                     {task.goals.title}
@@ -408,14 +410,20 @@ function TaskCard({
   onToggle: (id: string, completed: boolean) => void
   priorityColors: Record<string, string>
 }) {
+  const lightPriorityColors = {
+    high: 'border-l-red-500 bg-red-50',
+    medium: 'border-l-yellow-500 bg-yellow-50',
+    low: 'border-l-gray-400 bg-gray-50',
+  }
+  
   return (
-    <div className={`flex items-center gap-3 bg-gray-800 rounded-lg p-4 border-l-4 border border-gray-700 hover:bg-gray-750 transition-colors ${priorityColors[task.priority] || ''}`}>
+    <div className={`flex items-center gap-3 bg-white dark:bg-gray-800 rounded-lg p-4 border-l-4 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors shadow-sm ${task.priority === 'high' ? 'border-l-red-500 bg-red-50 dark:bg-red-500/5' : task.priority === 'medium' ? 'border-l-yellow-500 bg-yellow-50 dark:bg-yellow-500/5' : 'border-l-gray-400 dark:border-l-gray-500 bg-gray-50 dark:bg-gray-500/5'}`}>
       <button
         onClick={() => onToggle(task.id, !task.is_completed)}
         className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
           task.is_completed
             ? 'bg-green-500 border-green-500 text-white'
-            : 'border-gray-500 hover:border-green-500'
+            : 'border-gray-400 dark:border-gray-500 hover:border-green-500'
         }`}
       >
         {task.is_completed && (
@@ -430,11 +438,11 @@ function TaskCard({
       </button>
       
       <div className="flex-1 min-w-0">
-        <p className={`font-medium ${task.is_completed ? 'line-through text-gray-500' : 'text-white'}`}>
+        <p className={`font-medium ${task.is_completed ? 'line-through text-gray-400 dark:text-gray-500' : 'text-gray-900 dark:text-white'}`}>
           {task.title}
         </p>
         {task.goals && (
-          <p className="text-sm text-gray-400 flex items-center gap-1 mt-0.5">
+          <p className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1 mt-0.5">
             <span 
               className="w-2 h-2 rounded-full"
               style={{ backgroundColor: task.goals.color }}
@@ -443,14 +451,14 @@ function TaskCard({
           </p>
         )}
         {task.is_inbox && !task.goals && (
-          <p className="text-sm text-gray-500 mt-0.5">📥 Inbox</p>
+          <p className="text-sm text-gray-400 dark:text-gray-500 mt-0.5">📥 Inbox</p>
         )}
       </div>
       
       <span className={`text-xs px-2 py-1 rounded-full ${
-        task.priority === 'high' ? 'bg-red-500/20 text-red-400' :
-        task.priority === 'medium' ? 'bg-yellow-500/20 text-yellow-400' :
-        'bg-gray-700 text-gray-400'
+        task.priority === 'high' ? 'bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400' :
+        task.priority === 'medium' ? 'bg-yellow-100 dark:bg-yellow-500/20 text-yellow-600 dark:text-yellow-400' :
+        'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
       }`}>
         {task.priority}
       </span>
@@ -467,34 +475,34 @@ function GoalCard({ goal }: { goal: GoalWithStats }) {
   return (
     <Link
       href={`/goals/${goal.id}`}
-      className="bg-gray-800 rounded-xl p-4 border border-gray-700 hover:border-gray-600 hover:shadow-lg transition-all group"
+      className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-lg transition-all group shadow-sm"
     >
       <div className="flex items-start justify-between mb-3">
         <div 
           className="w-3 h-3 rounded-full"
           style={{ backgroundColor: goal.color }}
         ></div>
-        <span className="text-xs text-gray-500 capitalize">{goal.category}</span>
+        <span className="text-xs text-gray-400 dark:text-gray-500 capitalize">{goal.category}</span>
       </div>
       
-      <h3 className="font-semibold text-white group-hover:text-blue-400 transition-colors mb-2">
+      <h3 className="font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-2">
         {goal.title}
       </h3>
       
-      <div className="flex items-center gap-2 text-sm text-gray-400 mb-3">
-        <span className="text-green-400">{goal.completed_tasks}</span>
+      <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-3">
+        <span className="text-green-600 dark:text-green-400">{goal.completed_tasks}</span>
         <span>/</span>
         <span>{goal.total_tasks} tasks</span>
       </div>
       
       {/* Progress bar */}
-      <div className="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
+      <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
         <div 
           className="h-full bg-gradient-to-r from-blue-500 to-green-500 transition-all duration-500"
           style={{ width: `${progress}%` }}
         ></div>
       </div>
-      <p className="text-xs text-gray-500 mt-2 text-right">{progress}%</p>
+      <p className="text-xs text-gray-400 dark:text-gray-500 mt-2 text-right">{progress}%</p>
     </Link>
   )
 }

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Profile } from '@/types/database'
+import { useTheme } from '@/components/ThemeProvider'
 
 const TIMEZONES = [
   'UTC',
