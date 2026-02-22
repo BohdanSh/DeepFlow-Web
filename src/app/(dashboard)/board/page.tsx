@@ -23,7 +23,7 @@ import { CSS } from '@dnd-kit/utilities'
 type TaskUpdate = Database['public']['Tables']['tasks']['Update']
 type TaskInsert = Database['public']['Tables']['tasks']['Insert']
 
-type ColumnType = 'backlog' | 'in_progress' | 'done'
+type ColumnType = 'backlog' | 'todo' | 'in_progress' | 'review' | 'done'
 
 interface Column {
   id: ColumnType
@@ -33,7 +33,9 @@ interface Column {
 
 const columns: Column[] = [
   { id: 'backlog', title: 'Backlog', icon: '📥' },
+  { id: 'todo', title: 'To Do', icon: '📝' },
   { id: 'in_progress', title: 'In Progress', icon: '⚡' },
+  { id: 'review', title: 'In Review', icon: '👀' },
   { id: 'done', title: 'Done', icon: '✅' },
 ]
 
@@ -276,16 +278,10 @@ export default function BoardPage() {
   }
 
   const getTasksForColumn = (columnId: ColumnType): Task[] => {
-    switch (columnId) {
-      case 'backlog':
-        return tasks.filter(t => !t.is_completed && (t.status === 'backlog' || t.status === null))
-      case 'in_progress':
-        return tasks.filter(t => !t.is_completed && t.status === 'in_progress')
-      case 'done':
-        return tasks.filter(t => t.is_completed)
-      default:
-        return []
-    }
+    return tasks.filter(t => {
+      const taskStatus = t.status || 'backlog'
+      return taskStatus === columnId
+    })
   }
 
   const handleDragStart = (event: DragStartEvent) => {
@@ -308,38 +304,29 @@ export default function BoardPage() {
     let targetColumn: ColumnType | null = null
     
     // Check if dropped on a column
-    if (['backlog', 'in_progress', 'done'].includes(overId)) {
+    if (['backlog', 'todo', 'in_progress', 'review', 'done'].includes(overId)) {
       targetColumn = overId as ColumnType
     } else {
       // Dropped on another task - find that task's column
       const overTask = tasks.find(t => t.id === overId)
       if (overTask) {
-        if (overTask.is_completed) {
-          targetColumn = 'done'
-        } else if (overTask.status === 'in_progress') {
-          targetColumn = 'in_progress'
-        } else {
-          targetColumn = 'backlog'
-        }
+        targetColumn = (overTask.status || 'backlog') as ColumnType
       }
     }
 
     if (!targetColumn) return
 
+    // Don't update if dropped in same column
+    const currentStatus = task.status || 'backlog'
+    if (currentStatus === targetColumn) return
+
     const supabase = createClient()
     
-    let updateData: TaskUpdate = {}
-    
-    switch (targetColumn) {
-      case 'backlog':
-        updateData = { status: 'backlog', is_completed: false, completed_at: null }
-        break
-      case 'in_progress':
-        updateData = { status: 'in_progress', is_completed: false, completed_at: null }
-        break
-      case 'done':
-        updateData = { is_completed: true, completed_at: new Date().toISOString() }
-        break
+    const isDone = targetColumn === 'done'
+    const updateData: TaskUpdate = {
+      status: targetColumn,
+      is_completed: isDone,
+      completed_at: isDone ? new Date().toISOString() : null
     }
 
     // Optimistic update
@@ -357,8 +344,8 @@ export default function BoardPage() {
     const supabase = createClient()
     
     const updateData: TaskUpdate = isCompleted 
-      ? { is_completed: true, completed_at: new Date().toISOString() }
-      : { is_completed: false, completed_at: null, status: 'in_progress' }
+      ? { status: 'done', is_completed: true, completed_at: new Date().toISOString() }
+      : { status: 'todo', is_completed: false, completed_at: null }
 
     // Optimistic update
     setTasks(prev => prev.map(t =>
@@ -376,13 +363,15 @@ export default function BoardPage() {
     const { data: { user } } = await supabase.auth.getUser()
     
     if (!user) return
+
+    const isDone = columnId === 'done'
     
     const newTask: TaskInsert = {
       user_id: user.id,
       title,
-      is_completed: columnId === 'done',
-      completed_at: columnId === 'done' ? new Date().toISOString() : null,
-      status: columnId === 'done' ? null : columnId,
+      status: columnId,
+      is_completed: isDone,
+      completed_at: isDone ? new Date().toISOString() : null,
       priority: 'medium',
       is_inbox: false,
     }
@@ -421,20 +410,20 @@ export default function BoardPage() {
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
       >
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 md:mx-0 md:px-0">
           {columns.map(column => {
             const columnTasks = getTasksForColumn(column.id)
             
             return (
               <div
                 key={column.id}
-                className="bg-gray-100 dark:bg-gray-800/50 rounded-xl p-3 min-h-[300px] flex flex-col"
+                className="bg-gray-100 dark:bg-gray-800/50 rounded-xl p-3 min-h-[400px] flex flex-col flex-shrink-0 w-72"
               >
                 {/* Column Header */}
                 <div className="flex items-center justify-between mb-3 px-1">
                   <div className="flex items-center gap-2">
                     <span className="text-lg">{column.icon}</span>
-                    <h3 className="font-semibold text-gray-900 dark:text-white">
+                    <h3 className="font-semibold text-gray-900 dark:text-white text-sm">
                       {column.title}
                     </h3>
                   </div>
